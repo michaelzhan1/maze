@@ -1,0 +1,24 @@
+{
+  "name": "maze",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/michaelzhan1/maze#readme",
+  "bugs": {
+    "url": "https://github.com/michaelzhan1/maze/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelzhan1/maze.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "dist/index.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "start": "serve ."
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
