@@ -16,9 +16,13 @@
   "main": "dist/index.ts",
   "scripts": {
     "build": "tsc -b",
-    "start": "serve ."
+    "watch": "tsc --watch",
+    "start": "serve .",
+    "dev": "concurrently \"tsc --watch\" \"serve .\""
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
+    "serve": "^14.2.5",
     "typescript": "^5.9.3"
   }
 }

@@ -1,4 +1,4 @@
 const button: HTMLButtonElement | null = document.querySelector('#test');
 button?.addEventListener('click', () => {
-  console.log('Button clicked!');
+  console.log('Button clickesdfsdfd!');
 });
