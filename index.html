@@ -4,10 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" href="src/index.css">
 </head>
 <body>
-  Hello worsld
-  <button id="test">Test</button>
+  <form id="maze-form">
+    <input name="size" value="">
+    <button type="submit">Generate Maze</button>
+  </form>
+  <div id="maze-container">
+    <div id="maze"></div>
+  </div>
   <script src="dist/index.js"></script> 
 </body>
 </html>

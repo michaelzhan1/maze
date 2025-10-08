@@ -1,0 +1,30 @@
+#maze {
+  display: flex;
+  flex-direction: column;
+}
+
+#maze > div {
+  display: flex;
+}
+
+#maze .row {
+  width: fit-content;
+  height: 20px;
+}
+
+#maze .col {
+  width: 20px;
+}
+
+#maze .row:nth-child(odd),
+#maze .col:nth-child(odd) {
+  background-color: black;
+}
+
+#maze .row:nth-child(odd) {
+  height: 3px;
+}
+
+#maze .col:nth-child(odd) {
+  width: 3px;
+}
