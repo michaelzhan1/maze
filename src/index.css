@@ -1,3 +1,7 @@
+#maze-container {
+  margin-top: 20px;
+}
+
 #maze {
   display: flex;
   flex-direction: column;
@@ -27,4 +31,9 @@
 
 #maze .col:nth-child(odd) {
   width: 3px;
+}
+
+#maze .row:nth-child(2) > .col:first-child,
+#maze .row:nth-last-child(2) > .col:last-child {
+  background-color: white;
 }
