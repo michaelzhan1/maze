@@ -45,7 +45,11 @@
   width: 3px;
 }
 
-#maze .row:nth-child(2) > .col:first-child,
-#maze .row:nth-last-child(2) > .col:last-child {
+#maze .col.white {
   background-color: white;
 }
+
+/* #maze .row:nth-child(2) > .col:first-child,
+#maze .row:nth-last-child(2) > .col:last-child {
+  background-color: white;
+} */
