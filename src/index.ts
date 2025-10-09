@@ -7,6 +7,8 @@ const mazeContainer = document.getElementById(
   "maze-container"
 ) as HTMLDivElement;
 
+// const remaining
+
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const formData = new FormData(form);
@@ -22,10 +24,10 @@ form.addEventListener("submit", (e) => {
     return;
   }
 
-  generateMaze(size);
+  const solve = generateMazeAndSolve(size);
 });
 
-function generateMaze(input: number): void {
+function generateMazeAndSolve(input: number): [number, number][] {
   mazeContainer.innerHTML = "";
   const start = document.createElement("div");
   start.classList.add("flex-start");
@@ -41,7 +43,7 @@ function generateMaze(input: number): void {
   maze.innerHTML = "";
 
   try {
-    const mazeArr = buildMazeArray(input);
+    const { mazeArr, mazeSolve } = buildMazeArray(input);
 
     const size = input * 2 + 1;
     for (let i = 0; i < size; i++) {
@@ -58,13 +60,13 @@ function generateMaze(input: number): void {
         }
         row.appendChild(cell);
       }
-
       maze.appendChild(row);
     }
+    return mazeSolve;
   } catch (error) {
     console.error(error);
     alert("Error while building maze");
-    return;
+    return [];
   }
 }
 
@@ -85,8 +87,12 @@ const directions = [
   [-2, 0],
 ];
 
-function buildMazeArray(input: number): boolean[][] {
+function buildMazeArray(input: number): {
+  mazeArr: boolean[][];
+  mazeSolve: [number, number][];
+} {
   const size = input * 2 + 1;
+  const prev = new Map<number, number>();
 
   const arr: boolean[][] = [];
   for (let i = 0; i < size; i++) {
@@ -103,11 +109,14 @@ function buildMazeArray(input: number): boolean[][] {
   arr[size - 2][size - 1] = true;
 
   const stack = [];
-  stack.push(start);
+  stack.push([...start, -1, -1]);
   while (stack.length > 0) {
-    console.log(JSON.stringify(stack))
-    const [i, j] = stack.pop()!;
-    console.log(i, j);
+    const [i, j, pi, pj] = stack.pop()!;
+
+    const idx = i * size + j;
+    const pidx = pi * size + pj;
+    prev.set(idx, pidx);
+
     const shuf = shuffleArrayCopy(directions);
     shuf.forEach((dir) => {
       const [di, dj] = dir;
@@ -118,11 +127,28 @@ function buildMazeArray(input: number): boolean[][] {
         return;
       }
 
-      stack.push([ii, jj]);
+      stack.push([ii, jj, i, j]);
       arr[ii][jj] = true;
       arr[i + di / 2][j + dj / 2] = true;
     });
   }
 
-  return arr;
+  // walk backwards from end
+  let i = size - 2;
+  let j = size - 2;
+  const solve = [[i, j]];
+  while (prev.get(i * size + j) !== -1 * size - 1) {
+    const pidx = prev.get(i * size + j);
+    if (pidx === undefined) {
+      throw new Error("Error while solving maze");
+    }
+    i = Math.floor(pidx / size);
+    j = pidx % size;
+    solve.push([i, j]);
+  }
+
+  return {
+    mazeArr: arr,
+    mazeSolve: solve.reverse() as [number, number][],
+  };
 }
