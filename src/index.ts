@@ -9,6 +9,9 @@ const mazeContainer = document.getElementById(
 ) as HTMLDivElement;
 
 const cellMap = new Map<number, HTMLDivElement>();
+const solvedPathCells = new Set<number>();
+let remainingCells = 0;
+let extraCells = 0;
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -26,6 +29,8 @@ form.addEventListener("submit", (e) => {
   }
 
   const solve = generateMazeAndSolve(size);
+  solve.forEach((idx) => solvedPathCells.add(idx));
+  remainingCells = solve.length;
 });
 
 function generateMazeAndSolve(input: number): number[] {
@@ -44,6 +49,9 @@ function generateMazeAndSolve(input: number): number[] {
   maze.innerHTML = "";
 
   cellMap.clear();
+  solvedPathCells.clear();
+  remainingCells = 0;
+  extraCells = 0;
 
   try {
     const { mazeArr, mazeSolve } = buildMazeArray(input);
@@ -66,6 +74,7 @@ function generateMazeAndSolve(input: number): number[] {
         if (i % 2 == 1 && j % 2 == 1) {
           cell.addEventListener("click", () => {
             if (cell.classList.contains("green")) {
+              // deselect
               cell.classList.remove("green");
               const id = Number(cell.id);
               const neighbors = getNeighbors(id, size);
@@ -76,7 +85,14 @@ function generateMazeAndSolve(input: number): number[] {
                     ?.classList.remove("green");
                 }
               });
+
+              if (solvedPathCells.has(id)) {
+                remainingCells += 1;
+              } else {
+                extraCells -= 1;
+              }
             } else {
+              // select
               cell.classList.add("green");
               const id = Number(cell.id);
               const neighbors = getNeighbors(id, size);
@@ -87,7 +103,19 @@ function generateMazeAndSolve(input: number): number[] {
                     ?.classList.add("green");
                 }
               });
+
+              if (solvedPathCells.has(id)) {
+                remainingCells -= 1;
+              } else {
+                extraCells += 1;
+              }
+
+              if (remainingCells == 0 && extraCells == 0) {
+                setTimeout(() => alert("You solved the maze!"), 0);
+              }
             }
+
+            console.log(remainingCells, extraCells);
           });
         }
 
