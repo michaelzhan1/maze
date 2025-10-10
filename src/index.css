@@ -30,6 +30,7 @@
 
 #maze .col {
   width: 20px;
+  cursor: pointer;
 }
 
 #maze .row:nth-child(odd),
@@ -47,6 +48,10 @@
 
 #maze .col.white {
   background-color: white;
+}
+
+#maze .row .col.green {
+  background-color: lightgreen;
 }
 
 /* #maze .row:nth-child(2) > .col:first-child,

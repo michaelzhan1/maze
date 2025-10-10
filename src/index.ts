@@ -8,9 +8,7 @@ const mazeContainer = document.getElementById(
   "maze-container"
 ) as HTMLDivElement;
 
-// const remaining
-
-// TODO: clean up functions, organize, and use single number as idx for type and hashing reasons
+const cellMap = new Map<number, HTMLDivElement>();
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -45,6 +43,8 @@ function generateMazeAndSolve(input: number): number[] {
 
   maze.innerHTML = "";
 
+  cellMap.clear();
+
   try {
     const { mazeArr, mazeSolve } = buildMazeArray(input);
 
@@ -62,7 +62,37 @@ function generateMazeAndSolve(input: number): number[] {
         if (mazeArr[idx]) {
           cell.classList.add("white");
         }
+
+        if (i % 2 == 1 && j % 2 == 1) {
+          cell.addEventListener("click", () => {
+            if (cell.classList.contains("green")) {
+              cell.classList.remove("green");
+              const id = Number(cell.id);
+              const neighbors = getNeighbors(id, size);
+              neighbors.forEach((nidx) => {
+                if (cellMap.get(nidx)?.classList.contains("green")) {
+                  cellMap
+                    .get(id + Math.floor((nidx - id) / 2))
+                    ?.classList.remove("green");
+                }
+              });
+            } else {
+              cell.classList.add("green");
+              const id = Number(cell.id);
+              const neighbors = getNeighbors(id, size);
+              neighbors.forEach((nidx) => {
+                if (cellMap.get(nidx)?.classList.contains("green")) {
+                  cellMap
+                    .get(id + Math.floor((nidx - id) / 2))
+                    ?.classList.add("green");
+                }
+              });
+            }
+          });
+        }
+
         row.appendChild(cell);
+        cellMap.set(idx, cell);
       }
       maze.appendChild(row);
     }
